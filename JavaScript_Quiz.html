@@ -1,0 +1,996 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="shortcut icon" href="favicon.ico" />
+<link  rel="stylesheet" href="css/bootstrap.min.css">
+<link title="default" rel="stylesheet" href="highlightjs/css/ir_black.css">
+<meta descryption="The longest javascript quiz in the Internet, perfect for seeking front-end jobs :)">
+<title>marathonofenidat - ADHD javascript quiz - online test. JQUERY plugin </title>
+
+<style>
+    body{
+        font-family: Verdana, monospace;
+        font-weigth: bold;
+        font-size:11px;
+
+    }
+    header{
+        padding:8px;
+    }
+    #panel {padding-left:5px;}
+    #panel p{ color: red; width: 20%; display:inline;margin-left:10%;font-weight:bold;}
+    .section a{
+        font-family: "georgia", "times new roman", serif;
+        text-shadow: 2px 2px 3px rgb(108,190,53);
+        color:darkslateblue;
+        text-decoration:none;
+        font-size:28px;
+        padding:3px;
+    }
+    div.section{ display:none;}
+    #sticker{
+        position:fixed;
+        background-color:slategray;
+        color:white;
+        padding:10px;
+        width:54px;
+        height:40px;
+        
+        z-index:999;
+        opacity:0.8;
+        font-size:28px;
+        left:94%;
+        text-align:center; 
+        top:123px;
+        border: 1px solid lime;
+        border-radius: 5px 0 0 5px;
+
+    }
+    #switch{
+        margin-bottom:44px;
+    }
+    ul#switch li {
+        display:inline-table;
+        background-color: aliceBlue;
+        width: 200px;
+        margin: 2px;
+        cursor: pointer;
+        
+    }
+    code{
+        font-family: Verdana, monospace;
+        font-weigth: bold;
+        font-size:14px;
+
+    }
+    .test{
+        opacity:1.0;
+    }
+    pre{
+        border: 0px solid white;
+        background-color: white;
+        padding:2px;
+        
+    }
+    .two_column{
+        position:relative;
+        padding-top: 7px;
+    }
+    .star{
+        
+        position:relative;
+    }
+    .star img{
+        top:15px;
+        left:78%;
+        position:absolute;
+    }
+    .star img:nth-of-type(2){   margin-left:24px;   }
+    .star img:nth-of-type(3){   margin-left:48px;   }
+    .star img:nth-of-type(4){   margin-left:72px;   }
+    .star img:nth-of-type(5){   margin-left:96px;   }
+
+    .star pre {
+        border-radius: 2px;
+        margin 0 0 3px;
+    }
+    .two_column label{
+        display: inline-table;
+        width:141px;
+    }
+    label{
+        font-size: 12px;
+    }
+    .radio{
+        padding-left:6px;
+    }
+
+    .expl{
+        position:absolute;
+        background-color: lightsteelblue;
+        min-height:9px !important;
+        max-height:9px;
+        color: black;
+        overflow:hidden;
+        padding:4px;
+        
+    }
+    .expl p{
+        position:relative;
+        font-size:13px;
+    }
+    div.expl code{
+      
+    }
+    div.expl.span6 > p:first-of-type{
+        position:relative;
+        text-align:right;
+        line-height:0px;
+        font-size:8px;
+    }
+    .expl:hover{
+        max-height:180px !important;
+        height: 180px;
+    }
+
+    .expl.span6{
+        margin: 0px;
+        display:none;
+        z-index:999;
+
+    }        
+   
+    .numb{
+        position:absolute;
+        background-color: darkslategray;
+        min-height:24px !important;
+        max-height:24px;
+        width:24px;
+        color: white;
+        
+        padding:4px;
+        top:13px;
+        left:12px;
+        text-align: center;
+        z-index:998;
+    }
+    .buf{
+        display:none; 
+    }
+    .stats{
+        position:absolute;
+        width:50px;
+        height:50px;
+        top:50%;
+        left:80%;
+        background:red;
+        transition:width 1s;
+        -moz-transition:width 1s; /* Firefox 4 */
+        -webkit-transition:width 1s; /* Safari and Chrome */
+        -o-transition:width 1s; /* Opera */
+        z-index:998;
+        display:none;
+    }
+    .stats:hover{
+        width:-50px;
+        height:-50px;
+    
+    }
+</style>
+</head>
+
+<body>
+<a href="https://github.com/lawendowa-bzdzina/jquery-plugin-for-js-quizz"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_orange_ff7600.png" alt="Fork me on GitHub"></a>
+
+<div id="sticker">0</div>
+    
+     <header class="section text-center "> <a href="http://alpteam.pl/IT/js_quiz/JavaScript_Quiz.html"> marathon javascript quiz - free online test</a> </header>  
+
+ <ul id="switch"><li data-file="default" class="">Default </li><li data-file="dark" class="">Dark </li><li data-file="far" class="">FAR</li><li data-file="sunburst" class="">Sunburst</li><li data-file="zenburn" class="">Zenburn</li><li data-file="brown_paper" class="">Brown Paper</li><li data-file="school_book" class="">School Book</li><li data-file="ir_black" class="">IR Black</li><li data-file="solarized_dark" class="">Solarized - Dark</li><li data-file="solarized_light" class="">Solarized - Light</li><li data-file="arta" class="">Arta</li><li data-file="monokai" class="">Monokai</li><li data-file="pojoaque" class="">Pojoaque</li><li data-file="rainbow" class="">Rainbow</li><li data-file="tomorrow" class="">Tomorrow</li><li data-file="tomorrow-night-bright" class="">Tomorrow Night Bright</li><li data-file="tomorrow-night-blue" class="current">Tomorrow Night Blue</li><li data-file="tomorrow-night-eighties" class="">Tomorrow Night Eighties</li></ul>
+
+
+
+<div class="row-fluid">
+    <div  class="span12">
+
+      <div id="panel"><button class="btn btn-info">Clear localStorage</button><button class="btn btn-success">Show categories</button><p></p> </div>
+
+
+    <div class="test row-fluid" data-test="false"  data-false="0,!!,!,true">
+        <div class="star span6">
+        <div class="stats"></div>
+            <div class="numb" >999</div>
+              <pre><code>
+            !!0
+            </code></pre>
+        </div>
+
+        <div class="span6 two_column">    </div> <!---input area -->
+        <div class="expl span6"><p>&#x25BC;</p><p> <a href="http://en.wikipedia.org/wiki/Type_conversion"> Type_conversion </a> - +"1", +new Date, Number("1")  </p></div>  <!---explanations -->
+      </div><!--- row fluid -->
+
+
+
+<div class="section text-center" >    <a class="text-center" href="#" >For JS programming contest</a>     </div> <!-- division section -->
+
+
+<div class="test row-fluid" data-test="object"  data-false="305,string,number">
+        <div class="star span6">
+            <div class="numb" >999</div>
+            <pre><code>
+            var str = "305 794";
+            var arr = str.match(/\w+/g);
+            typeof arr[0];
+            </code></pre>
+    </div>
+
+        <div class="span6 two_column">    </div> <!---input area -->
+        <div class="expl span6"><p>&#x25BC;</p> <a rel="nofollow" href="http://ideone.com/samples#sample_lang_35">sample</a>  <a rel="nofollow" href="http://www.spoj.com/problems/classical/all/lang=JS">SPOJ</a> </div>  <!---explanations -->
+    </div><!--- row fluid -->
+
+    
+<div class="test row-fluid" data-test="2"  data-false="2,201,102">
+        <div class="star span6">
+            <div class="numb" >999</div>
+            <pre><code>
+            var str = "102";
+            var numb = parseInt ( str.split("").reverse().toString() );
+            console.log ( numb );
+            </code></pre>
+    </div>
+
+    <div class="span6 two_column"> </div> <!---input area -->
+    <div class="expl span6"><p>&#x25BC;</p><pre>  <code>parseInt( str.split("").reverse().toString().replace(/,/g, "") );</code> </pre>  </div>  <!---explanations -->
+    </div><!--- row fluid -->
+
+
+
+<div class="test row-fluid" data-test="true"  data-false="false">
+        <div class="star span6">
+            <div class="numb" >999</div>
+            <pre><code>
+            var isFloat = "1.1"
+            if ( isFloat % 1  ) { true; }
+            else  { false; }
+
+            </code></pre>
+    </div>
+
+    <div class="span6 two_column"> </div> <!---input area -->
+    <div class="expl span6"><p>&#x25BC;</p><a rel="nofollow" href="http://stackoverflow.com/questions/3885817/how-to-check-if-a-number-is-float-or-integer"></a> </div>  <!---explanations -->
+    </div><!--- row fluid -->
+
+
+
+<div class="test row-fluid" data-test="10.00"  data-false="10.001,8.001,8">
+        <div class="star span6">
+            <div class="numb" >999</div>
+            <pre><code>
+            parseFloat ( "10.001", 8 ).toPrecision(4);
+            </code></pre>
+    </div>
+
+    <div class="span6 two_column"> </div> <!---input area -->
+    <div class="expl span6"><p>&#x25BC;</p><a rel="nofollow" href="http://www.mredkj.com/javascript/nfbasic2.html"></a> </div>  <!---explanations -->
+    </div><!--- row fluid -->
+
+<div class="test row-fluid" data-test="true"  data-false="false">
+        <div class="star span6">
+            <div class="numb" >999</div>
+            <pre><code>
+            var a = [1,2,3];
+            var b = a.slice(0);
+            console.log ( a == b );
+            </code></pre>
+    </div>
+
+    <div class="span6 two_column"> </div> <!---input area -->
+    <div class="expl span6"><p>&#x25BC;</p>var new_array_2 = [].concat(old_array); </div>  <!---explanations -->
+    </div><!--- row fluid -->
+
+
+<div class="section text-center" >    <a class="text-center" href="#" > Type Conversion </a>     </div> <!-- division section -->
+
+<div class="test row-fluid" data-test="false" data-test_name="true,NaN">
+        <div class="star span6">
+            <div class="numb" >999</div>
+            <pre><code>
+            Infinity > NaN;
+            </code></pre>
+    </div>
+
+        <div class="span6 two_column">    </div> <!---input area -->
+        <div class="expl span6"><p>&#x25BC;</p> http://ferrante.pl/frontend/javascript/quiz-javascript/ </div>  <!---explanations -->
+    </div><!--- row fluid -->
+
+<div class="test row-fluid" data-test="1[object Object]" data-false="[object Object]" >
+        <div class="star span6">
+            <div class="numb" >999</div>
+            <pre><code>
+            "" + [1] + {};
+            </code></pre>
+    </div>
+
+        <div class="span6 two_column">    </div> <!---input area -->
+        <div class="expl span6"><p>&#x25BC;</p> http://ferrante.pl/frontend/javascript/quiz-javascript/ </div>  <!---explanations -->
+    </div><!--- row fluid -->
+
+<div class="test row-fluid" data-test="10"  data-false="100,2,3">
+        <div class="star span6">
+            <div class="numb" >999</div>
+            <pre><code>
+            [10, 100, 1][~"2" + + "3"];
+            </code></pre>
+    </div>
+
+        <div class="span6 two_column">    </div> <!---input area -->
+        <div class="expl span6"><p>&#x25BC;</p> http://ferrante.pl/frontend/javascript/quiz-javascript/ </div>  <!---explanations -->
+    </div><!--- row fluid -->
+
+
+<div class="test row-fluid" data-test="NaN3"  data-false="NaN">
+        <div class="star span6">
+            <div class="numb" >999</div>
+            <pre><code>
+            var s = [s+3];
+            s;
+            </code></pre>
+    </div>
+
+        <div class="span6 two_column">    </div> <!---input area -->
+        <div class="expl span6"><p>&#x25BC;</p>  </div>  <!---explanations -->
+    </div><!--- row fluid -->
+
+<div class="test row-fluid" data-test="33"  data-false="3,4">
+        <div class="star span6">
+            <div class="numb" >999</div>
+            <pre><code>
+            ~~"3.14";
+            </code></pre>
+    </div>
+
+        <div class="span6 two_column">    </div> <!---input area -->
+        <div class="expl span6"><p>&#x25BC;</p>  </div>  <!---explanations -->
+    </div><!--- row fluid -->
+
+<div class="test row-fluid" data-test="-4"  data-false="3,4,-3">
+        <div class="star span6">
+            <div class="numb" >999</div>
+            <pre><code>
+            ~"3.14";
+            </code></pre>
+    </div>
+
+        <div class="span6 two_column">    </div> <!---input area -->
+        <div class="expl span6"><p>&#x25BC;</p>  </div>  <!---explanations -->
+    </div><!--- row fluid -->
+
+<div class="test row-fluid" data-test="false"  data-false="true">
+        <div class="star span6">
+            <div class="numb" >999</div>
+            <pre><code>
+            0.3 === 0.1 + 0.2;
+            </code></pre>
+    </div>
+
+        <div class="span6 two_column">    </div> <!---input area -->
+        <div class="expl span6"><p>&#x25BC;</p> https://github.com/nathansmith/javascript-quiz/blob/master/ANSWERS.md  </div>  <!---explanations -->
+    </div><!--- row fluid -->
+
+
+<div class="test row-fluid" data-test="8"  data-false="0,10,8">
+        <div class="star span6">
+            <div class="numb" >999</div>
+            <pre><code>
+            parseInt("010");
+            </code></pre>
+    </div>
+
+        <div class="span6 two_column">    </div> <!---input area -->
+        <div class="expl span6"><p>&#x25BC;</p> Old bug! Fixed in Chrome :)  </div>  <!---explanations -->
+    </div><!--- row fluid -->
+
+<div class="test row-fluid" data-test="3"  data-false="0,-1,1,2,3">
+        <div class="star span6">
+            <div class="numb" >999</div>
+            <pre><code>
+            var x = 2, y = 3;
+            console.log (x++-++y+x++); 
+            </code></pre>
+    </div>
+
+        <div class="span6 two_column">    </div> <!---input area -->
+        <div class="expl span6"><p>&#x25BC;</p>  </div>  <!---explanations -->
+    </div><!--- row fluid -->
+
+<div class="test row-fluid" data-test="false"  data-false="true">
+        <div class="star span6">
+            <div class="numb" >999</div>
+            <pre><code>
+            var x = "21", y = "200);
+            console.log (x < y); 
+            </code></pre>
+    </div>
+
+        <div class="span6 two_column">    </div> <!---input area -->
+        <div class="expl span6"><p>&#x25BC;</p>  </div>  <!---explanations -->
+    </div><!--- row fluid -->
+
+<div class="test row-fluid" data-test="true"  data-false="false">
+        <div class="star span6">
+            <div class="numb" >999</div>
+            <pre><code>
+            "abc" < "abd"
+            </code></pre>
+    </div>
+        <div class="span6 two_column">    </div> <!---input area -->
+        <div class="expl span6"><p>&#x25BC;</p>  </div>  <!---explanations -->
+    </div><!--- row fluid -->
+
+
+<div class="test row-fluid" data-test="false"  data-false="true">
+        <div class="star span6">
+            <div class="numb" >999</div>
+            <pre><code>
+            (100).toString().length == (101['toString'])()['length']
+            </code></pre>
+    </div>
+
+        <div class="span6 two_column">    </div> <!---input area -->
+        <div class="expl span6"><p>&#x25BC;</p>  </div>  <!---explanations -->
+    </div><!--- row fluid -->
+
+<div class="test row-fluid" data-test="8"  data-false="0.99999999,0.5,0.5,4">
+        <div class="star span6">
+            <div class="numb" >999</div>
+            <pre><code>
+            var x = (1,5 - 1) * 2;
+            </code></pre>
+    </div>
+
+        <div class="span6 two_column">    </div> <!---input area -->
+        <div class="expl span6"><p>&#x25BC;</p>  </div>  <!---explanations -->
+    </div><!--- row fluid -->
+
+
+
+<div class="test row-fluid" data-test="true"  data-false="false">
+        <div class="star span6">
+            <div class="numb" >999</div>
+            <pre><code>
+            "abc" < "abd"
+            </code></pre>
+    </div>
+        <div class="span6 two_column">    </div> <!---input area -->
+        <div class="expl span6"><p>&#x25BC;</p>  </div>  <!---explanations -->
+    </div><!--- row fluid -->
+
+
+
+<div class="test row-fluid" data-test="2"  data-false="1,0,x">
+        <div class="star span6">
+            <div class="numb" >999</div>
+            <pre><code>
+            var b = 10,
+            c = (
+                20,
+                function (x) { return x + 100},
+                function () { return arguments[0]}
+            );
+            a = b + c
+            ({x: 10}).x
+            </code></pre>
+    </div>
+        <div class="span6 two_column">    </div> <!---input area -->
+        <div class="expl span6"><p>&#x25BC;</p> <a href="http://dmitrysoshnikov.com/ecmascript/the-quiz/"></a>ECMA-262 by Dymitry </div>  <!---explanations -->
+    </div><!--- row fluid -->
+
+
+
+    <div class="test row-fluid" data-test="object" >
+        <div class="star span6">
+            <div class="numb" >999</div>
+              <pre><code>
+            (function(){
+                return typeof arguments;
+            })();
+            </code></pre>
+        </div>
+
+        <div class="span6 two_column">    </div> <!---input area -->
+        <div class="expl span6"><p>&#x25BC;</p><p>The Module Pattern approach http://benalman.com/news/2010/11/immediately-invoked-function-expression/</p></div>  <!---explanations -->
+       
+    </div><!--- row fluid -->
+
+
+    <div class="test row-fluid" data-test="Error"  data-false="23" >
+        <div class="star span6">
+             <div class="numb" >999</div> 
+            <pre><code>
+            var f = function g(){ return 23; };
+            typeof g();
+            </code></pre>
+    </div>
+        <div class="span6 two_column">    </div> <!---input area -->
+        <div class="expl span6"><p>&#x25BC;</p><p>Functions invocation http://yehudakatz.com/2011/08/11/understanding-javascript-function-invocation-and-this/ </p> </div>  <!---explanations -->
+    </div><!--- row fluid -->
+
+ <div class="test row-fluid" data-test="1"  data-false="" >
+        <div class="star span6">
+            <div class="numb" >999</div>
+
+            <pre><code>
+            (function(x){
+                delete x;
+                return x;
+            })(1)
+            </code></pre>
+    </div>
+
+         <div class="span6 two_column">    </div> <!---input area -->
+        <div class="expl span6"> <p>&#x25BC;</p><p>Explanation soon </p></div>  <!---explanations -->
+    </div><!--- row fluid -->
+
+
+<div class="test row-fluid" data-test="undefined" >
+        <div class="star span6">
+            <div class="numb" >999</div>          
+
+            <pre><code>
+            var y = 1, x = y = typeof x;
+            x;
+            </code></pre>
+    </div>
+
+        <div class="span6 two_column">    </div> <!---input area -->
+        <div class="expl span6"> <p>&#x25BC;</p><p>Explanations </p></div>  <!---explanations -->
+    </div><!--- row fluid -->
+
+<div class="test row-fluid" data-test="number" data-test_name="">
+        <div class="star span6">
+            <div class="numb" >999</div>
+            <pre><code>
+            (function f(f){
+                return typeof f();
+            })(function(){ return 1; });
+            </code></pre>
+    </div>
+
+        <div class="span6 two_column">    </div> <!---input area -->
+        <div class="expl span6"> <p>&#x25BC;</p><p> (f) is a function so invoking typeof f() give a number, so nuber will be returned </p></div>  <!---explanations -->
+    </div><!--- row fluid -->
+
+<div class="test row-fluid" data-test="undefined" >
+        <div class="star span6">
+            <div class="numb" >6</div>
+            <pre><code>
+            var foo = {
+                bar: function() { return this.baz; },
+                baz: 1
+            };
+            (function(){
+                return typeof arguments[0]();
+            })(foo.bar);
+            </code></pre>
+    </div>
+
+        <div class="span6 two_column">    </div> <!---input area -->
+        <div class="expl span6"><p>&#x25BC;</p>(function(){ console.log (arguments[0]);return typeof arguments[0].call(foo);})(foo.bar); </div>  <!---explanations -->
+    </div><!--- row fluid -->
+
+<div class="test row-fluid" data-test="undefined" >
+        <div class="star span6">
+            <div class="numb" >999</div>
+            <pre><code>
+            var foo = {
+                bar: function(){ return this.baz; },
+                baz: 1
+            }
+          typeof (f = foo.bar)();
+            </code></pre>
+    </div>
+
+        <div class="span6 two_column">    </div> <!---input area -->
+        <div class="expl span6"><p>&#x25BC;</p><p>Explanations </p> </div>  <!---explanations -->
+    </div><!--- row fluid -->
+
+<div class="section text-center" >    <a class="text-center" href="#" >Functional programming</a>     </div> <!-- division section -->
+
+<div class="test row-fluid" data-test="number" data-false="2">
+        <div class="star span6">
+            <div class="numb" >999</div>
+            <pre><code>
+          var f = (function f(){ return "1"; }, function g(){ return 2; })();
+          typeof f;
+            </code></pre>
+    </div>
+
+        <div class="span6 two_column">    </div> <!---input area -->
+        <div class="expl span6"><p>&#x25BC;</p> http://imbuzu.wordpress.com/2012/11/03/the-lazy-function-declaration-pattern-javascript/ </div>  <!---explanations -->
+    </div><!--- row fluid -->
+
+
+<div class="section text-center" >    <a class="text-center" href="#" >Function carrying</a>     </div> <!-- division section -->
+<div class="section text-center" >    <a class="text-center" href="#" >Function invocation</a>     </div> <!-- division section -->
+
+<div class="section text-center" >    <a class="text-center" href="#" >Changing context</a>     </div> <!-- division section -->
+
+<div class="test row-fluid" data-test="Error" data-false="true,false">
+        <div class="star span6">
+            <div class="numb" >999</div>
+            <pre><code>
+            var x = 10;
+            var foo = {
+              x: 20,
+              bar: function () {
+                var x = 30;
+                return this.x;
+              }
+            };
+             
+            console.log(
+              foo.bar(),
+              (foo.bar)(),
+              (foo.bar = foo.bar)(),
+              (foo.bar, foo.bar)()
+            );
+
+            </code></pre>
+    </div>
+
+        <div class="span6 two_column">    </div> <!---input area -->
+        <div class="expl span6"><p>&#x25BC;</p> http://imbuzu.wordpress.com/2012/11/03/the-lazy-function-declaration-pattern-javascript/ </div>  <!---explanations -->
+    </div><!--- row fluid -->
+
+
+
+
+<div class="test row-fluid" data-test="Error" data-false="true,false">
+        <div class="star span6">
+            <div class="numb" >999</div>
+            <pre><code>
+            function(){ function(){return true;}  };
+            </code></pre>
+    </div>
+
+        <div class="span6 two_column">    </div> <!---input area -->
+        <div class="expl span6"><p>&#x25BC;</p> http://imbuzu.wordpress.com/2012/11/03/the-lazy-function-declaration-pattern-javascript/ </div>  <!---explanations -->
+    </div><!--- row fluid -->
+
+<div class="test row-fluid" data-test="1undefined">
+        <div class="star span6">
+            <div class="numb" >9</div>
+            <pre><code>
+            var x = 1;
+            if (function f(){}) {
+                x += typeof f;
+            }
+            x;
+            </code></pre>
+    </div>
+
+        <div class="span6 two_column">    </div> <!---input area -->
+        <div class="expl span6"><p>&#x25BC;</p><p>!(function u(){}); typeof typeof x </p> </div>  <!---explanations -->
+    </div><!--- row fluid -->
+
+<div class="test row-fluid" data-test="string">
+        <div class="star span6">
+            <div class="numb" >999</div>
+            <pre><code>
+          var x = [typeof x, typeof y][1];
+          typeof typeof x;
+            </code></pre>
+    </div>
+
+        <div class="span6 two_column">    </div> <!---input area -->
+        <div class="expl span6"><p>&#x25BC;</p>typeof typeof x </div>  <!---explanations -->
+    </div><!--- row fluid -->
+
+<div class="section text-center" >    <a class="text-center" href="#" > IIFE Immediately-Invoked Function Expression  </a>     </div> <!-- division section -->
+
+
+<div class="test row-fluid" data-test="undefined" data-test_name="">
+        <div class="star span6">
+            <div class="numb" >999</div>
+            <pre><code>
+            (function(foo){
+               return typeof foo.bar;
+            })({ foo: { bar: 1 } });
+            </code></pre>
+    </div>
+
+        <div class="span6 two_column">    </div> <!---input area -->
+        <div class="expl span6"><p>&#x25BC;</p><p>http://clubajax.org/javascript-context-call-and-bind-ninja-level/ </p> </div>  <!---explanations -->
+    </div><!--- row fluid -->
+
+
+<div class="section text-center" >    <a class="text-center" href="#" >ES5 miscellaneous</a>     </div> <!-- division section -->
+
+
+
+<div class="test row-fluid" data-test="2" data-test_name="">
+        <div class="star span6">
+            <div class="numb" >12</div>
+            <pre><code>
+            (function f(){
+               function f(){ return 1; }
+               return f();
+               function f(){ return 2; }
+            })();
+            </code></pre>
+    </div>
+
+        <div class="span6 two_column">    </div> <!---input area -->
+        <div class="expl span6"> <p>&#x25BC;</p><p>Explanations </p></div>  <!---explanations -->
+    </div><!--- row fluid -->
+
+
+<div class="test row-fluid" data-test="Undefined" data-test_name="">
+        <div class="star span6">
+            <div class="numb" >13</div>
+            <pre><code>
+            function f(){ return f; }
+            new f() instanceof f;
+            </code></pre>
+    </div>
+
+        <div class="span6 two_column">    </div> <!---input area -->
+        <div class="expl span6"><p>&#x25BC;</p><p>Explanations </p> </div>  <!---explanations -->
+    </div><!--- row fluid -->
+
+<div class="test row-fluid" data-test="Undefined" data-test_name="">
+        <div class="star span6">
+            <div class="numb" >999</div>
+            <pre><code>
+            with (function(x, undefined){}) length;
+            </code></pre>
+    </div>
+
+        <div class="span6 two_column">    </div> <!---input area -->
+        <div class="expl span6"><p>&#x25BC;</p> </div>  <!---explanations -->
+    </div><!--- row fluid -->
+
+
+<div class="section text-center" >    <a class="text-center" href="#" >JS Timer event</a>     </div> <!-- division section -->
+<div class="section text-center" >    <a class="text-center" href="#" >JS Paterns</a>     </div> <!-- division section -->
+
+
+    </div><!--- row fluid -->
+</div><!--- row fluid main-->
+
+<script src="highlightjs/highlight.pack.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/jquery.js">\x3C/script>')</script>
+<script src="js/underscore.min.js"></script>
+
+<script>
+/**
+ * jQuery rightQuizz v0.0.3 - plugin for quizzez with history ( localStorage )
+ * 
+ * Terms of Use - jQuery rightQuizz plugin
+ * under the MIT (http://www.opensource.org/licenses/mit-license.php) License.
+ *
+ * Copyright 2013 Marcin Papka All rights reserved.
+ * alpteam.pl
+ */
+
+
+;(function ( $, window, document, undefined ) {
+
+    
+    var pluginName = "quizjs",
+        defaults = {
+            quizName:"",
+            quizNumber:0,
+            dataTest:"undefined",
+            correct:3,
+            firstshot:false,
+            falseAnswer:[],
+            falseInput:12,
+            finished:false,
+            lastAnswer:"",
+            history:"on"
+        };
+
+    // The actual plugin constructor
+    function Plugin( element, options ) {
+        this.element = element;
+
+        this.options = $.extend( {}, defaults, options );
+
+        this._defaults = defaults;
+        this._name = pluginName;
+
+        this.init();
+    }
+
+    Plugin.prototype = {
+
+        init: function() {
+
+            _this = this;
+            this.options.dataTest = $(this.element).attr("data-test");
+            this.options.quizName = $(this.element).attr("data-test_name");
+            
+            var df = $(this.element).attr("data-false");
+            df ? this.options.falseAnswer = df.split(",") :  this.options.falseAnswer = [];
+
+            this.options.quizNumber = qGlobal.quizNumber++;
+
+            $(this.element).children().find('.numb').text( this.options.quizNumber );
+
+            this.appendFalseInput(this.element, this.options);
+
+            $(this.element).children().next().find('input[name='+'ans'+ this.options.quizNumber +']').on('click', $.proxy( this.bindStars, this, this.element, this.options )  );
+            
+            this.localStorageHistory(this.element, this.options);
+
+        },
+
+        appendFalseInput: function(el, options) {
+           
+            var element = $(el).children(".two_column");
+            var str = '<label class=\"radio\"><input type=\"radio\" name=\"ans'+ options.quizNumber +'\" value=\"';
+            
+            var ans = rand2( options.falseAnswer );
+
+            var allInput = "";
+
+            for ( var i = 0 ; i < options.falseInput; i++ ){
+                allInput = allInput + str + ans[i] + '\">' + ans[i] +  '</label>';
+            } 
+            element.append( allInput );
+
+            function rand2(){
+                var falseTab = _.shuffle(qGlobal.falseAnswers);
+                falseTab = falseTab.slice(0, options.falseInput - options.falseAnswer.length );
+ 
+                falseTab = falseTab.concat( options.falseAnswer );
+                if ( !_.contains (falseTab, options.dataTest ) ) { falseTab.splice(0,1, options.dataTest ); } 
+                falseTab = _.shuffle(falseTab);
+                return _.uniq(falseTab); 
+
+            }
+        },
+            
+        addStars:   function(where, numbers){
+            var str = "";
+            for ( var i = 0; i< numbers; i++){
+                str = str + '<img src=\"img/star.png\">';
+            }
+            where.append(str);
+        },
+        addExcl:    function(where){
+            where.append( '<img src=\"img/ex.png\">' )
+        },
+        finishQ:     function(where){
+            where.find('input').attr('disabled','disabled').off();
+            where.children(":first").children("pre").css("opacity",0.7);
+            where.find('.expl').show(69);
+
+            this.saveLocalStorage();
+        },
+        bindStars:  function(el, options, event) {
+            options.lastAnswer = $(event.target).val();
+
+            if ( options.lastAnswer === options.dataTest ){
+                if ( options.correct === 3 ) {
+                    this.addStars ( $(el).children(":first"), 3 ); 
+                    this.finishQ ( $(el) );
+                    qGlobal.points++;
+                    $(el).css('background-color','YellowGreen');
+                   
+                }
+                else{
+                    this.addStars ( $(el).children(":first"), options.correct );
+                    this.finishQ ( $(el) );
+                    qGlobal.points = qGlobal.points + ( options.correct / 10 );
+                    $(el).css('background-color',"#DCFA9E");
+                }
+                    $(event.target).parent().css("font-weight","bold");
+                    $('#sticker').text (qGlobal.points);
+                    options.finished = true;
+            }
+            //wrong answers
+            else{
+                if ( options.correct === 1 ){
+                    this.addExcl(  $(el).children(":first") );
+                    this.finishQ ( $(el) );
+                    options.finished = true;
+                    $(el).css('background-color',"#F5D9E4");
+                }
+
+            options.correct--;
+            }
+//                $(el).parent().find('input[name='+'ans'+ this.options.quizNumber +']').off();
+
+        },
+        localStorageHistory:   function(el, options){
+          if ( localStorage.getItem("rightQuizz") === null ) { return false;}
+          var ob = JSON.parse ( localStorage.getItem("rightQuizz") );
+          if ( ob[ options.quizNumber ] ) {
+              options.correct = ob[ options.quizNumber ][0];
+              var test =  $(el).children().find('input[value="'+ob[options.quizNumber][1] +'"]' );
+              //if previous false value is not present then just find input
+              if ( test.length > 0 ){
+                  $(el).children().find('input[value="'+ob[options.quizNumber][1] +'"]' ).trigger('click');
+              }
+              else{
+                  $(el).children().find('input').trigger('click');
+              }
+          }
+        },
+        saveLocalStorage:     function(){
+          if ( localStorage.getItem("rightQuizz") === null ) { var x = {}; localStorage.setItem( 'rightQuizz', JSON.stringify(x) ); }
+
+          var ob = JSON.parse ( localStorage.getItem("rightQuizz") );
+          var str = this.options.lastAnswer
+                
+          str = str.replace(/\[/g,"\[");
+          str = str.replace(/\]/g,"\]");
+
+          ob[ this.options.quizNumber ] = [ this.options.correct, str ];
+          
+          localStorage.setItem( 'rightQuizz', JSON.stringify(ob) );
+        }
+    };
+
+    // A really lightweight plugin wrapper around the constructor,
+    // preventing against multiple instantiations
+    $.fn[pluginName] = function ( options ) {
+        return this.each(function () {
+            if (!$.data(this, "plugin_" + pluginName)) {
+                $.data(this, "plugin_" + pluginName, new Plugin( this, options ));
+            }
+        });
+    };
+
+})( jQuery, window, document );
+
+    var qGlobal={
+        points:0.0,
+        quizNumber:0,
+        falseAnswers:["1","undefined","object","string","null","0","number","boolean","true","false","NaN","array","Error","[object Array]","[object Object]","function"]
+}
+
+    var changeView = {
+
+        nameCSS: function(event){return $(event.target).attr('data-file'); },
+        catToggle:false,
+
+        cssTemplate:      function (event){
+            $('link[title="default"]').attr("href","highlightjs/css/" + this.nameCSS(event) + ".css" );
+        },
+        showCategories:   function(event){
+            if ( this.catToggle ){ this.catToggle = !this.catToggle; $('div.section').hide(); $(event.target).text("Show categories"); }
+            else { this.catToggle = !this.catToggle; $('div.section').show(); $(event.target).text("Hide categories"); }
+
+        },
+        clearLocalStorage:function(event){
+            localStorage.clear();
+            $("#panel p").text("localstorage cleared!");
+            setTimeout ( this.timeText, 4000 );
+        },
+        timeText:         function(text){
+            $("#panel p").text("");
+        }
+
+    }
+
+$(".test").quizjs();
+
+$("li").on("click",  $.proxy( changeView, "cssTemplate" )  );
+$("button.btn-success").on("click",  $.proxy( changeView, "showCategories" )  );
+$("button.btn-info").on("click",  $.proxy( changeView, "clearLocalStorage" )  );
+hljs.initHighlightingOnLoad();
+
+
+</script>
+
+<img class="buf" src="img/ex.png">
+<img class="buf" src="img/star.png">
+
+
+</body>
+</html>
